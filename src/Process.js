@@ -36,25 +36,38 @@ class Process {
       this.cpuTimeNeeded -= time;
     }
     // If blocking time is needed by this process, move it to the blocking queue
-    else { // blocking time required 
+    else {
+      // blocking time required
       // by emitting the appropriate interrupt
-      console.log("Emit my appropriate interrupt");
+      console.log("Emit my appropriate interrupt, but how?");
       // Make sure the `stateChanged` flag is toggled appropriately
       this.stateChanged = true;
     }
   }
-
-  // If this process requires blocking time, decrement the amount of blocking
-  // time it needs by the input time
-  // Once it no longer needs to perform any blocking execution, move it to the
-  // top running queue by emitting the appropriate interrupt
-  // Make sure the `stateChanged` flag is toggled appropriately
-  executeBlockingProcess(time) {}
+  executeBlockingProcess(time) {
+    // If this process requires blocking time,
+    if (this.blockingTimeNeeded > 0) {
+      //  decrement the amount of blocking time it needs by the input time
+      this.blockingTimeNeeded -= time;
+      if (this.blockingTimeNeeded <= 0) {
+        // Once it no longer needs to perform any blocking execution, move it to the
+        // top running queue by emitting the appropriate interrupt
+        console.log("Do me, move it to top running queue");
+        // Make sure the `stateChanged` flag is toggled appropriately
+        this.stateChanged = true;
+      }
+    }
+  }
 
   // Returns this process's stateChanged property
-  isStateChanged() {}
+  isStateChanged() {
+    return this.stateChanged;
+  }
 
-  get pid() {}
+  get pid() {
+    // GCR: Not sure what this is/What they want me to do, what the word "Get" does?
+    return this._pid; // GCR I think this is what I need. Thanks for no guidance. 
+  }
 
   // Private function used for testing; DO NOT MODIFY
   _getParentQueue() {
