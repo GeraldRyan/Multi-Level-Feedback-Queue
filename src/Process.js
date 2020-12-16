@@ -14,6 +14,8 @@ class Process {
     this.blockingTimeNeeded = blocking ? Math.round(Math.random() * 100) : 0;
     // A bool representing whether this process was toggled from blocking to non-blocking or vice versa
     this.stateChanged = false;
+    //G:
+    this.blocking = blocking;
   }
 
   setParentQueue(queue) {
@@ -21,7 +23,8 @@ class Process {
     // TODO
 
     // GCR says: Done or more needed?
-    if (this.queue === null) {  // G: do we want this if statement or do we not just want to set the damn queue with the input arg? 
+    if (this.queue === null) {
+      // G: do we want this if statement or do we not just want to set the damn queue with the input arg?
       this.queue = queue;
     }
   }

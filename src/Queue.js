@@ -55,8 +55,32 @@ class Queue {
   // then handled accordingly, depending on whether it has finished executing or not
   manageTimeSlice(currentProcess, time) {
     if (currentProcess.stateChanged) {
-      return "State Has Changed, no process execution";
+      this.quantumClock = 0;
+      return;
     }
+    this.quantumClock += time;
+    if (this.quantumClock >= this.quantum) {
+      this.quantumClock = 0;
+      const process = this.dequeue();
+      if (!process.isFinished()) {
+        this.scheduler.handleInterrupt(
+          this,
+          process,
+          SchedulerInterrupt.LOWER_PRIORITY
+        );
+      }
+    }
+    // // G: Manage a process's execution. What the heck does that mean? Do I call a process method?
+    // currentProcess.blocking
+    //   ? currentProcess.executeBlockingProcess(time)
+    //   : currentProcess.executeProcess(time);
+    // this.dequeue();
+    // // Handle Accordingly? In other words go somewhere, in other words move to a new queue. Re-queued.
+    // // TODO: How do I requeue?
+    // if (currentProcess.isFinished()) {
+    //   // Do nothing. The process leaves the queue
+    // }
+    //TODO: Depending on process type or what queue it was on and it's state, have to reassign it to a queue.
   }
 
   // Execute the next non-blocking process (assuming this is a CPU queue)
