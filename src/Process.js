@@ -21,18 +21,26 @@ class Process {
     // TODO
 
     // GCR says: Done or more needed?
-    this.queue = queue;
+    if (this.queue === null) {  // G: do we want this if statement or do we not just want to set the damn queue with the input arg? 
+      this.queue = queue;
+    }
   }
 
   isFinished() {
     // GCR: What is this method supposed to be doing??
     // GCR: Delete refernence? Or is a bool to check if it's finished?
+    // Going with bool for now:
+    if (this.cpuTimeNeeded <= 0 && this.blockingTimeNeeded <= 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   executeProcess(time) {
     // If no blocking time is needed by this process, decrement the amount of
     // CPU time it needs by the input time
-    if (this.blockingTimeNeeded === 0) {
+    if (this.blockingTimeNeeded <= 0) {
       this.cpuTimeNeeded -= time;
     }
     // If blocking time is needed by this process, move it to the blocking queue
@@ -52,7 +60,7 @@ class Process {
       if (this.blockingTimeNeeded <= 0) {
         // Once it no longer needs to perform any blocking execution, move it to the
         // top running queue by emitting the appropriate interrupt
-        console.log("Do me, move it to top running queue");
+        console.log("Implement move me to top running queue");
         // Make sure the `stateChanged` flag is toggled appropriately
         this.stateChanged = true;
       }
@@ -66,7 +74,7 @@ class Process {
 
   get pid() {
     // GCR: Not sure what this is/What they want me to do, what the word "Get" does?
-    return this._pid; // GCR I think this is what I need. Thanks for no guidance. 
+    return this._pid; // GCR I think this is what I need. Thanks for no guidance.
   }
 
   // Private function used for testing; DO NOT MODIFY
