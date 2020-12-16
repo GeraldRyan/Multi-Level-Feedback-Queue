@@ -29,19 +29,25 @@ class Queue {
     if (this.isEmpty()) {
       return "Underflow";
     }
-    return this.items.shift();
+    return this.processes.shift();
   }
 
   // Return the least-recently added process without removing it from the list of processes
-  peek() {}
+  peek() {
+      return processes[0];
+  }
 
   isEmpty() {
     return this.processes.length == 0;
   }
 
-  getPriorityLevel() {}
+  getPriorityLevel() {
+      return this.priorityLevel;
+  }
 
-  getQueueType() {}
+  getQueueType() {
+      return this.queueType;
+  }
 
   // Manages a process's execution for the given amount of time
   // Processes that have had their states changed should not be affected
