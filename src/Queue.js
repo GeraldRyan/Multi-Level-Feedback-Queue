@@ -34,7 +34,7 @@ class Queue {
 
   // Return the least-recently added process without removing it from the list of processes
   peek() {
-      return processes[0];
+    return processes[0];
   }
 
   isEmpty() {
@@ -42,18 +42,22 @@ class Queue {
   }
 
   getPriorityLevel() {
-      return this.priorityLevel;
+    return this.priorityLevel;
   }
 
   getQueueType() {
-      return this.queueType;
+    return this.queueType;
   }
 
   // Manages a process's execution for the given amount of time
   // Processes that have had their states changed should not be affected
   // Once a process has received the alloted time, it needs to be dequeue'd and
   // then handled accordingly, depending on whether it has finished executing or not
-  manageTimeSlice(currentProcess, time) {}
+  manageTimeSlice(currentProcess, time) {
+    if (currentProcess.stateChanged) {
+      return "State Has Changed, no process execution";
+    }
+  }
 
   // Execute the next non-blocking process (assuming this is a CPU queue)
   // This method should call `manageTimeSlice` as well as execute the next running process
