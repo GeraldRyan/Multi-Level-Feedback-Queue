@@ -24,7 +24,7 @@ class Scheduler
     }
 
     // Executes the scheduler in an infinite loop as long as there are processes in any of the queues
-    // Calculate the (((time slice for the next iteration of the scheduler))) by subtracting the current
+    // Calculate the time slice for the next iteration of the scheduler by subtracting the current
     // time from the clock property. Don't forget to update the clock property afterwards.
     // On every iteration of the scheduler, if the blocking queue is not empty, blocking work
     // should be done. Once the blocking work has been done, perform some CPU work in the same iteration.
@@ -39,13 +39,15 @@ class Scheduler
             while (this.blockingQueue.length !== 0)
             {
                 // Do Blocking Queue Work
+                this.blockingQueue.doBlockingWork(workTime);
             }
 
             this.runningQueues.forEach(q =>
             {
                 if (q.length !== 0)
                 {
-                    // Do queue work
+                    // Do CPU queue work
+                    q.doCPUWork(workTime);
                 }
             })
         }
@@ -65,7 +67,7 @@ class Scheduler
 
     addNewProcess(process)
     {
-        this.runningQueues[0].enqueue(process);  // because process object is passed by reference to queues object that is a component member of scheduler object.
+        this.runningQueues[0].enqueue(process);
     }
 
     // The scheduler's interrupt handler that receives a queue, a process, and an interrupt string constant
@@ -77,16 +79,17 @@ class Scheduler
             case 'PROCESS_BLOCKED':
                 this.blockingQueue.enqueue(queue.dequeue(process));
                 break;
-            case 'PROCESS_READY': // for first level queue? 
-                this.addNewProcess(process);
+            case 'PROCESS_READY': 
+                this.addNewProcess(queue.dequeue(process));
                 break;
             case 'LOWER_PRIORITY':
                 if (queue.getQueueType() === QueueType.CPU_QUEUE)
                 {
-                    let downPriority = Math.max(queue.getPriorityLevel - 1,0)
+                    let downPriority = Math.max(queue.getPriorityLevel - 1, 0)
                     this.runningQueues[downPriority].enqueue(process)
                 }
-                else {
+                else
+                {
                     this.blockingQueue.enqueue(process)
                 }
                 break;
