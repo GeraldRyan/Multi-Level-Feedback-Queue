@@ -55,12 +55,12 @@ class Scheduler
     {
         for (let i = 0; i < this.runningQueues.length; i++)
         {
-            if (this.runningQueues[i].length === 0 && this.blockingQueue.length == 0)
+            if (this.runningQueues[i].length > 0 || this.blockingQueue.length > 0)
             {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     addNewProcess(process)
