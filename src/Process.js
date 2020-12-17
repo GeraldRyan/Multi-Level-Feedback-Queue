@@ -84,7 +84,10 @@ class Process
   {
     return this._pid;
   }
-
+  getpid()
+  {
+    return this._pid;
+  }
 
   // Private function used for testing; DO NOT MODIFY
   _getParentQueue()

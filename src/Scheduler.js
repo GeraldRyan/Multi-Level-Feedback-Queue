@@ -57,17 +57,20 @@ class Scheduler
     {
         for (let i = 0; i < this.runningQueues.length; i++)
         {
-            if (this.runningQueues[i].length > 0 || this.blockingQueue.length > 0)
+            if (!this.runningQueues[i].isEmpty())
             {
                 return false;
             }
         }
-        return true;
+        return this.blockingQueue.isEmpty();
     }
 
     addNewProcess(process)
     {
-        this.runningQueues[0].enqueue(process);
+        if (this.runningQueues.length > 0)
+        {
+            this.runningQueues[0].enqueue(process);
+        }
     }
 
     // The scheduler's interrupt handler that receives a queue, a process, and an interrupt string constant
@@ -77,20 +80,20 @@ class Scheduler
         switch (interrupt)
         {
             case 'PROCESS_BLOCKED':
-                this.blockingQueue.enqueue(queue.dequeue(process));
+                this.blockingQueue.enqueue(process);
                 break;
-            case 'PROCESS_READY': 
-                this.addNewProcess(queue.dequeue(process));
+            case 'PROCESS_READY':
+                this.addNewProcess(process);
                 break;
             case 'LOWER_PRIORITY':
                 if (queue.getQueueType() === QueueType.CPU_QUEUE)
                 {
-                    let downPriority = Math.max(queue.getPriorityLevel - 1, 0)
-                    this.runningQueues[downPriority].enqueue(process)
+                    let downPriority = Math.max(queue.getPriorityLevel() - 1, 0);
+                    this.runningQueues[downPriority].enqueue(process);
                 }
                 else
                 {
-                    this.blockingQueue.enqueue(process)
+                    this.blockingQueue.enqueue(process);
                 }
                 break;
         }

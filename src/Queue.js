@@ -23,7 +23,7 @@ class Queue
     enqueue(process)
     {
         this.processes.push(process);
-        console.log("Process ", process.getpid(), "enqueued\n");
+        process.setParentQueue(this);
         return process.getpid();
     }
 
@@ -40,7 +40,10 @@ class Queue
     // Return the least-recently added process without removing it from the list of processes
     peek()
     {
-        return processes[0];
+        if (this.processes.length > 0)
+        {
+            return this.processes[0];
+        }
     }
 
     isEmpty()
@@ -93,11 +96,12 @@ class Queue
 
     // Execute the next blocking process (assuming this is the blocking queue)
     // This method should call `manageTimeSlice` as well as execute the next blocking process
-    doBlockingWork(time) {
+    doBlockingWork(time)
+    {
         const process = this.peek();
         process.executeBlockingProcess(time);
         this.manageTimeSlice(process, time);
-     }
+    }
 
     // The queue's interrupt handler for notifying when a process needs to be moved to a different queue
     // Should handle PROCESS_BLOCKED and PROCESS_READY interrupts
