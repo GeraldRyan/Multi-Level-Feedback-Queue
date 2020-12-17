@@ -28,7 +28,28 @@ class Scheduler
     // time from the clock property. Don't forget to update the clock property afterwards.
     // On every iteration of the scheduler, if the blocking queue is not empty, blocking work
     // should be done. Once the blocking work has been done, perform some CPU work in the same iteration.
-    run() { }
+    run()
+    {
+        while (!this.allQueuesEmpty)
+        {
+            const currentTime = Date.now();
+            const workTime = currentTime - this.clock; // the time from when 'run' was called and scheduler was instantiated
+            this.clock = currentTime;
+
+            while (this.blockingQueue.length !== 0)
+            {
+                // Do Blocking Queue Work
+            }
+
+            this.runningQueues.forEach(q =>
+            {
+                if (q.length !== 0)
+                {
+                    // Do queue work
+                }
+            })
+        }
+    }
 
     allQueuesEmpty()
     {
@@ -42,7 +63,10 @@ class Scheduler
         return false;
     }
 
-    addNewProcess(process) { }
+    addNewProcess(process)
+    {
+        this.runningQueues[0].enqueue(process);
+    }
 
     // The scheduler's interrupt handler that receives a queue, a process, and an interrupt string constant
     // Should handle PROCESS_BLOCKED, PROCESS_READY, and LOWER_PRIORITY interrupts.
