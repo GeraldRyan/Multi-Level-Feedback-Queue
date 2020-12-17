@@ -51,6 +51,7 @@ class Scheduler
                 }
             })
         }
+        console.log("finishing\n")
     }
 
     allQueuesEmpty()
