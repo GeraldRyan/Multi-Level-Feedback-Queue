@@ -111,10 +111,11 @@ class Queue
         switch (interrupt)
         {
             case 'PROCESS_BLOCKED':
-                this.scheduler.handleInterrupt(this, source, interrupt)
+                this.scheduler.handleInterrupt(this, source, interrupt);
+                this.dequeue(source);
                 break;
             case 'PROCESS_READY':
-                this.scheduler.handleInterrupt(this, source, interrupt)
+                this.scheduler.handleInterrupt(this, source, interrupt);
                 break;
             default:
                 break;

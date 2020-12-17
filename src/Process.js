@@ -67,6 +67,7 @@ class Process
     }
     if (this.blockingTimeNeeded <= 0)
     {
+      this.blockingTimeNeeded = 0;
       // Once it no longer needs to perform any blocking execution, move it to the top running queue by emitting the appropriate interrupt
       this.queue.emitInterrupt(this, SchedulerInterrupt.PROCESS_READY);
       // Make sure the `stateChanged` flag is toggled appropriately
