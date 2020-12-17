@@ -78,7 +78,7 @@ class Scheduler
     handleInterrupt(queue, process, interrupt)
     {
         switch (interrupt)
-        {
+        { 
             case 'PROCESS_BLOCKED':
                 this.blockingQueue.enqueue(process);
                 break;
@@ -88,7 +88,7 @@ class Scheduler
             case 'LOWER_PRIORITY':
                 if (queue.getQueueType() === QueueType.CPU_QUEUE)
                 {
-                    let downPriority = Math.max(queue.getPriorityLevel() - 1, 0);
+                    let downPriority = Math.min(queue.getPriorityLevel() + 1, 2);
                     this.runningQueues[downPriority].enqueue(process);
                 }
                 else

@@ -30,10 +30,10 @@ class Queue
     // Dequeues the next process in the queue. Return the dequeue'd process
     dequeue()
     {
-        if (this.isEmpty())
-        {
-            return "Underflow";
-        }
+        // if (this.isEmpty())
+        // {
+        //     return "Underflow";
+        // }
         return this.processes.shift();
     }
 
@@ -108,14 +108,18 @@ class Queue
     // The process also needs to be removed from the queue
     emitInterrupt(source, interrupt)
     {
+        const sourceIndex = this.processes.indexOf(source);
+        this.processes.splice(sourceIndex, 1);
         switch (interrupt)
         {
+            
             case 'PROCESS_BLOCKED':
                 this.scheduler.handleInterrupt(this, source, interrupt);
-                this.dequeue(source);
+
                 break;
             case 'PROCESS_READY':
                 this.scheduler.handleInterrupt(this, source, interrupt);
+
                 break;
             default:
                 break;
