@@ -9,6 +9,7 @@ class Scheduler
     constructor()
     {
         this.clock = Date.now();
+        this.globalCounter = 0; //stretch goal for priority boost tracking
         this.blockingQueue = new Queue(this, 50, 0, QueueType.BLOCKING_QUEUE);
         this.runningQueues = [];
         // Initialize all the CPU running queues
@@ -30,11 +31,13 @@ class Scheduler
     // should be done. Once the blocking work has been done, perform some CPU work in the same iteration.
     run()
     {
+        let pbTime = 0;
         while (!this.allQueuesEmpty())
         {
             const currentTime = Date.now();
-            const workTime = currentTime - this.clock; // the time from when 'run' was called and scheduler was instantiated
+            const workTime = currentTime - this.clock; // semi random
             this.clock = currentTime;
+            pbTime += workTime;
 
             if (!this.blockingQueue.isEmpty())
             {
@@ -45,6 +48,19 @@ class Scheduler
                 this.blockingQueue.doBlockingWork(workTime);
             }
             // console.log("Blocking Queue length", this.blockingQueue.length);
+            if (pbTime >= 500)
+            { // Stretch goal
+                console.log(`PB to be called ${pbTime}`)
+                pbTime = 0; // reset to zero
+                //priority boost everything
+                for (let i = 0; i < this.runningQueues.length; i++)
+                {
+                    if (i != 0)
+                    {
+                        this.runningQueues[i].priorityBoost();
+                    }
+                }
+            }
 
             this.runningQueues.forEach(q =>
             {
@@ -100,6 +116,8 @@ class Scheduler
                 {
                     this.blockingQueue.enqueue(process);
                 }
+            case 'PRIORITY_BOOST':
+                this.addNewProcess(process)
                 break;
         }
 

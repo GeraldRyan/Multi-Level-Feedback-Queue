@@ -85,6 +85,18 @@ class Queue
 
     }
 
+    priorityBoost()
+    {
+        if (this.processes.length != 0)
+        {
+            this.processes.forEach(p =>
+            {
+                let process = this.dequeue(p);
+                this.emitInterrupt(process, SchedulerInterrupt.PRIORITY_BOOST)
+            })
+        }
+    }
+
     // Execute the next non-blocking process (assuming this is a CPU queue)
     // This method should call `manageTimeSlice` as well as execute the next running process
     doCPUWork(time)
@@ -122,7 +134,9 @@ class Queue
                 break;
             case 'PROCESS_READY':
                 this.scheduler.handleInterrupt(this, source, interrupt);
-
+                break;
+            case 'PRIORITY_BOOST':
+                this.scheduler.handleInterrupt(this, source, interrupt);
                 break;
             default:
                 break;
