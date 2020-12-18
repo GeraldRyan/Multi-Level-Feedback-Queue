@@ -89,9 +89,12 @@ class Queue
     // This method should call `manageTimeSlice` as well as execute the next running process
     doCPUWork(time)
     {
-        const process = this.peek();
-        process.executeProcess(time);
-        this.manageTimeSlice(process, time);
+        const process = this.peek()
+        if (process)
+        {
+            process.executeProcess(time);
+            this.manageTimeSlice(process, time);
+        }
     }
 
     // Execute the next blocking process (assuming this is the blocking queue)
@@ -112,7 +115,7 @@ class Queue
         this.processes.splice(sourceIndex, 1);
         switch (interrupt)
         {
-            
+
             case 'PROCESS_BLOCKED':
                 this.scheduler.handleInterrupt(this, source, interrupt);
 

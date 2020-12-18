@@ -30,28 +30,32 @@ class Scheduler
     // should be done. Once the blocking work has been done, perform some CPU work in the same iteration.
     run()
     {
-        while (!this.allQueuesEmpty)
+        while (!this.allQueuesEmpty())
         {
             const currentTime = Date.now();
             const workTime = currentTime - this.clock; // the time from when 'run' was called and scheduler was instantiated
             this.clock = currentTime;
 
-            while (this.blockingQueue.length !== 0)
+            if (!this.blockingQueue.isEmpty())
             {
+                // console.log("Blocking Queue length", this.blockingQueue);
+
+                // console.log("Blocking Queue[0]", this.blockingQueue[0]);
                 // Do Blocking Queue Work
                 this.blockingQueue.doBlockingWork(workTime);
             }
+            // console.log("Blocking Queue length", this.blockingQueue.length);
 
             this.runningQueues.forEach(q =>
             {
-                if (q.length !== 0)
+                if (!q.isEmpty())
                 {
                     // Do CPU queue work
                     q.doCPUWork(workTime);
                 }
             })
         }
-        console.log("finishing\n")
+        // console.log("finishing\n")
     }
 
     allQueuesEmpty()
@@ -79,7 +83,7 @@ class Scheduler
     handleInterrupt(queue, process, interrupt)
     {
         switch (interrupt)
-        { 
+        {
             case 'PROCESS_BLOCKED':
                 this.blockingQueue.enqueue(process);
                 break;

@@ -6,10 +6,13 @@ const Process = require('./Process');
 // blocking process, and then runs the scheduler.
 // Feel free to edit this file to execute your scheduler implemetation
 // in a different way.
-const main = () => {
+const main = () =>
+{
+
     const scheduler = new Scheduler(); // instantiation/construction
-    
-    for (let i = 1; i < 101; i++) {  // loading of scheduler (lock and load)
+
+    for (let i = 1; i < 101; i++)
+    {  // loading of scheduler (lock and load)
         let rollForBlockingProcess = Math.random() < 0.25;
         scheduler.addNewProcess(new Process(i + 1000, null, rollForBlockingProcess));
     }
